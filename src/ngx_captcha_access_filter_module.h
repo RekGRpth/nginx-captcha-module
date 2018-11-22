@@ -3,12 +3,12 @@
 
 
 
-typedef struct {
+/*typedef struct {
 	ngx_flag_t	 enable;
 	ngx_str_t  	 private_key;
 	ngx_str_t  	 verify_url;
 	
-} ngx_captcha_access_filter_loc_conf_t;
+} ngx_captcha_access_filter_loc_conf_t;*/
 
 
 

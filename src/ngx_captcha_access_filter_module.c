@@ -1,12 +1,12 @@
-#include <string.h>
+//#include <string.h>
 #include <ngx_config.h>
 #include <ngx_core.h>
 #include <ngx_http.h>
 
 
-#include <curl/curl.h>
-#include <curl/types.h>
-#include <curl/easy.h>
+//#include <curl/curl.h>
+//#include <curl/types.h>
+//#include <curl/easy.h>
 
 
 #include "ngx_captcha_access_filter_module.h"
@@ -21,11 +21,11 @@ ngx_int_t verifica_captcha(ngx_http_request_t *r, ngx_str_t *resposta);
 
 /** MEMCACHED */
 typedef int bool;
-#include <libmemcached/memcached.h>
+//#include <libmemcached/memcached.h>
 
 // const char *config_string= "--SERVER=localhost:11211 --BINARY-PROTOCOL --CONNECT-TIMEOUT=1000 --TCP-NODELAY --TCP-KEEPALIVE --SND-TIMEOUT=1000 --RCV-TIMEOUT=1000";
-const char *config_string= "--SERVER=localhost:11211";
-static memcached_st * memc = NULL;
+//const char *config_string= "--SERVER=localhost:11211";
+//static memcached_st * memc = NULL;
 
 
 
@@ -33,11 +33,11 @@ static memcached_st * memc = NULL;
 
 static ngx_int_t ngx_captcha_access_filter_install(ngx_conf_t *cf);
 
-static void *
-ngx_captcha_access_filter_create_conf( ngx_conf_t *cf );
+/*static void *
+ngx_captcha_access_filter_create_conf( ngx_conf_t *cf );*/
 
-static char *
-ngx_captcha_access_filter_merge_loc_conf( ngx_conf_t *cf, void *parent, void *child );
+/*static char *
+ngx_captcha_access_filter_merge_loc_conf( ngx_conf_t *cf, void *parent, void *child );*/
 
 
 static u_char *
@@ -51,7 +51,7 @@ ngx_captcha_get_request_parameter_value( ngx_http_request_t *r, u_char *buffer, 
 /* Module's directives  */
 static ngx_command_t  ngx_captcha_access_filter_commands[] = 
 {
-    {   ngx_string("captcha"),                    
+/*    {   ngx_string("captcha"),                    
         NGX_HTTP_LOC_CONF|NGX_HTTP_LMT_CONF|NGX_CONF_FLAG,  
         ngx_conf_set_flag_slot,                             
         NGX_HTTP_LOC_CONF_OFFSET,                           
@@ -70,7 +70,7 @@ static ngx_command_t  ngx_captcha_access_filter_commands[] =
         ngx_conf_set_str_slot,
         NGX_HTTP_LOC_CONF_OFFSET,
         offsetof(ngx_captcha_access_filter_loc_conf_t, verify_url),
-        NULL },
+        NULL },*/
 
     {   ngx_string("captcha_generate"),                    
         NGX_HTTP_LOC_CONF|NGX_CONF_NOARGS,  
@@ -94,8 +94,8 @@ static ngx_http_module_t  ngx_captcha_access_filter_module_ctx = {
     NULL,                               /* create server configuration */
     NULL,                               /* merge server configuration */
 
-    ngx_captcha_access_filter_create_conf,        /* create location configuration */
-    ngx_captcha_access_filter_merge_loc_conf  /* merge location configuration */
+    NULL/*ngx_captcha_access_filter_create_conf*/,        /* create location configuration */
+    NULL/*ngx_captcha_access_filter_merge_loc_conf*/  /* merge location configuration */
 };
 
 
@@ -122,7 +122,7 @@ ngx_captcha_access_filter_handler(ngx_http_request_t *r) {
     ngx_int_t   rc;
 
     ngx_captcha_access_filter_ctx_t       *ctx    = NULL;
-    ngx_captcha_access_filter_loc_conf_t  *lcf    = NULL;
+//    ngx_captcha_access_filter_loc_conf_t  *lcf    = NULL;
 
     ngx_str_t   response_key    = ngx_string("captcha_response_field");
     ngx_str_t   response_val    = ngx_null_string;
@@ -130,10 +130,10 @@ ngx_captcha_access_filter_handler(ngx_http_request_t *r) {
     u_char      *buffer     = NULL;
 
 
-    lcf = ngx_http_get_module_loc_conf(r, ngx_captcha_access_filter_module);
+/*    lcf = ngx_http_get_module_loc_conf(r, ngx_captcha_access_filter_module);
     if (!lcf->enable ) {
         return NGX_OK;
-    }
+    }*/
 
 
     /* Create a new context */
@@ -208,7 +208,7 @@ ngx_captcha_access_filter_install(ngx_conf_t *cf) {
     *h = ngx_captcha_access_filter_handler;
     
     // Configura o memcached
-    memc = memcached(config_string, strlen(config_string));
+//    memc = memcached(config_string, strlen(config_string));
     
     // FIXME Incluir código para liberar conexao do memcached
     //memcached_free(memc);
@@ -218,7 +218,7 @@ ngx_captcha_access_filter_install(ngx_conf_t *cf) {
 }
 
 
-static void *
+/*static void *
 ngx_captcha_access_filter_create_conf(ngx_conf_t *cf) {
 
     ngx_captcha_access_filter_loc_conf_t *conf;
@@ -238,10 +238,10 @@ ngx_captcha_access_filter_create_conf(ngx_conf_t *cf) {
     conf->verify_url.len    = 0;
 
     return conf;
-}
+}*/
 
 
-static char *
+/*static char *
 ngx_captcha_access_filter_merge_loc_conf( ngx_conf_t *cf, void *parent, void *child ) {
 
     ngx_captcha_access_filter_loc_conf_t *prev = parent;
@@ -252,7 +252,7 @@ ngx_captcha_access_filter_merge_loc_conf( ngx_conf_t *cf, void *parent, void *ch
     ngx_conf_merge_value( conf->enable, prev->enable, 0 );
 
     return NGX_CONF_OK;
-}
+}*/
 
 
 static u_char *
@@ -432,7 +432,7 @@ ngx_int_t verifica_captcha(ngx_http_request_t *r, ngx_str_t *resposta) {
     
     
     
-    // char * memcached_get(memcached_st *ptr, const char *key, size_t key_length, size_t *value_length, uint32_t *flags, memcached_return_t *error);
+/*    // char * memcached_get(memcached_st *ptr, const char *key, size_t key_length, size_t *value_length, uint32_t *flags, memcached_return_t *error);
     // memcached_return_t mc_rc = memcached_set(memc, (char*) ngx_chave.data, ngx_chave.len, (char*)resposta, strlen((char*)resposta), (time_t) 10000, (uint32_t)0);
     // if (mc_rc != MEMCACHED_SUCCESS) {
     //     ngx_log_error(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
@@ -462,7 +462,7 @@ ngx_int_t verifica_captcha(ngx_http_request_t *r, ngx_str_t *resposta) {
         time_t t = 0;
         memcached_delete(memc, (char*) captcha_key.data, captcha_key.len, t);
         return 1;
-    }
+    }*/
     return 0;
 }
 
@@ -577,12 +577,12 @@ ngx_http_captcha_generate_handler(ngx_http_request_t *r)
     
 
     // TODO Permitir configurar o tempo de expiração
-    memcached_return_t mc_rc = memcached_set(memc, (char*) ngx_chave.data, ngx_chave.len, (char*)resposta, strlen((char*)resposta), (time_t) 10000, (uint32_t)0);
+/*    memcached_return_t mc_rc = memcached_set(memc, (char*) ngx_chave.data, ngx_chave.len, (char*)resposta, strlen((char*)resposta), (time_t) 10000, (uint32_t)0);
     if (mc_rc != MEMCACHED_SUCCESS) {
         ngx_log_error(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                        "Problemas ao escrever no memcached");
         return NGX_HTTP_INTERNAL_SERVER_ERROR;
-    }
+    }*/
     
     // FIXME Código de teste
     // ngx_str_t re = ngx_string("vswrv");
